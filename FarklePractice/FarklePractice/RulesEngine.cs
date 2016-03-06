@@ -50,14 +50,6 @@ namespace FarklePractice
 
             if(0 == score)
             {
-                if(IsTwoSetsOfThreeOfAKind(dice))
-                {
-                    score = ScoreForTwoSetsOfThree;
-                }
-            }
-
-            if(0 == score)
-            {
                 if(IsFourOfAKindAndAPair(dice))
                 {
                     score = ScoreForFourOfAKindAndAPair;
@@ -88,19 +80,28 @@ namespace FarklePractice
         private int CalculateXofAKindScore(IDice[] dice)
         {
             int score = 0;
+            bool foundThreeOfAKind = false;
+
             for (int i = MinimumDiceValue; i <= MaximumDiceValue; i++)
             {
                 diceValueCount = delegate (IDice diceVal) { return diceVal.Value == i; };
                 int count = dice.Count(diceValueCount);
                 if (count >= FourOfAKind && count <= SixOfAKind)
                 {
-                    score += ScoreXofAKind(count);
+                    score = ScoreXofAKind(count);
                 }
                 else if(ThreeOfAKind == count)
                 {
-                    score += ScoreThreeOfAKind(i);
+                    if (foundThreeOfAKind)
+                    {
+                        score = ScoreForTwoSetsOfThree;
+                    }
+                    else
+                    {
+                        foundThreeOfAKind = true;
+                        score = ScoreThreeOfAKind(i);
+                    }
                 }
-
 
             }
 
@@ -142,30 +143,6 @@ namespace FarklePractice
             }
             
             return score;
-        }
-
-
-        private bool IsTwoSetsOfThreeOfAKind(IDice[] dice)
-        {
-            bool result = false;
-            int setsOfThree = 0;
-
-            for (int i = MinimumDiceValue; i <= MaximumDiceValue; i++)
-            {
-                diceValueCount = delegate (IDice diceVal) { return diceVal.Value == i; };
-                if (dice.Count(diceValueCount) == 3)
-                {
-                    setsOfThree++;
-                }
-
-                if (2 == setsOfThree)
-                {
-                    result = true;
-                }
-            }
-
-
-            return result;
         }
 
         private bool IsFourOfAKindAndAPair(IDice[] dice)
