@@ -8,7 +8,7 @@ namespace FarklePractice
 {
     public enum PointValues { OneHundred = 100, Fifty = 50, TwoHundred = 200, ThreeHundred = 300,
                               FourHundred = 400, FiveHundred = 500, SixHundred = 600, OneThousand = 1000,
-                              OneThousandFiveHundred = 1500, TwoThousand = 2000, ThreeThousand = 3000};
+                              OneThousandFiveHundred = 1500, TwoThousand = 2000, TwoThousandFiveHundred = 2500, ThreeThousand = 3000};
 
     public class RulesEngine : IRulesEngine
     {
@@ -22,6 +22,7 @@ namespace FarklePractice
         private const int ScoreForAStraight = 1500;
         private const int ScoreForThreePairs = 1500;
         private const int ScoreForFourOfAKindAndAPair = 1500;
+        private const int ScoreForTwoSetsOfThree = 2500;
 
         private Func<IDice, bool> diceValueCount;
 
@@ -34,6 +35,14 @@ namespace FarklePractice
             if(IsRollAOneThroughSixStraight(dice))
             {
                 score = ScoreForAStraight;
+            }
+
+            if(0 == score)
+            {
+                if(IsTwoSetsOfThreeOfAKind(dice))
+                {
+                    score = ScoreForTwoSetsOfThree;
+                }
             }
 
             if(0 == score)
@@ -87,6 +96,29 @@ namespace FarklePractice
             }
 
             return score;
+        }
+
+        private bool IsTwoSetsOfThreeOfAKind(IDice[] dice)
+        {
+            bool result = false;
+            int setsOfThree = 0;
+
+            for (int i = MinimumDiceValue; i <= MaximumDiceValue; i++)
+            {
+                diceValueCount = delegate (IDice diceVal) { return diceVal.Value == i; };
+                if (dice.Count(diceValueCount) == 3)
+                {
+                    setsOfThree++;
+                }
+
+                if (2 == setsOfThree)
+                {
+                    result = true;
+                }
+            }
+
+
+            return result;
         }
 
         private bool IsFourOfAKindAndAPair(IDice[] dice)
