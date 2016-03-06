@@ -146,33 +146,6 @@ namespace FarklePractice
             return score;
         }
 
-        private bool IsFourOfAKindAndAPair(IDice[] dice)
-        {
-            bool result = false;
-            bool foundFourOfAKind = false;
-            bool foundTwoOfAKind = false;
-
-            for (int i = MinimumDiceValue; i <= MaximumDiceValue; i++)
-            {
-                diceValueCount = delegate (IDice diceVal) { return diceVal.Value == i; };
-                if (dice.Count(diceValueCount) == 4)
-                {
-                    foundFourOfAKind = true;
-                }
-
-                if (dice.Count(diceValueCount) == 2)
-                {
-                    foundTwoOfAKind = true;
-                }
-
-                if(foundTwoOfAKind && foundFourOfAKind)
-                {
-                    result = true;
-                }
-            }
-            return result;
-        }
-
         private bool IsRollAOneThroughSixStraight(IDice[] dice)
         {
             bool result = true;
