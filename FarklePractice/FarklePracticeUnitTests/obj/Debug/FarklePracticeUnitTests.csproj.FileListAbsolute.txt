@@ -7,12 +7,3 @@ c:\users\slickjam\documents\visual studio 2015\Projects\FarklePractice\FarklePra
 c:\users\slickjam\documents\visual studio 2015\Projects\FarklePractice\FarklePracticeUnitTests\obj\Debug\FarklePracticeUnitTests.pdb
 C:\Users\SlickJam\documents\visual studio 2015\Projects\FarklePractice\FarklePracticeUnitTests\bin\Debug\Moq.dll
 C:\Users\SlickJam\documents\visual studio 2015\Projects\FarklePractice\FarklePracticeUnitTests\bin\Debug\Moq.xml
-C:\Users\SlickJam\dev\Farkle\FarklePractice\FarklePracticeUnitTests\bin\Debug\FarklePracticeUnitTests.dll
-C:\Users\SlickJam\dev\Farkle\FarklePractice\FarklePracticeUnitTests\bin\Debug\FarklePracticeUnitTests.pdb
-C:\Users\SlickJam\dev\Farkle\FarklePractice\FarklePracticeUnitTests\bin\Debug\FarklePractice.exe
-C:\Users\SlickJam\dev\Farkle\FarklePractice\FarklePracticeUnitTests\bin\Debug\Moq.dll
-C:\Users\SlickJam\dev\Farkle\FarklePractice\FarklePracticeUnitTests\bin\Debug\FarklePractice.pdb
-C:\Users\SlickJam\dev\Farkle\FarklePractice\FarklePracticeUnitTests\bin\Debug\Moq.xml
-C:\Users\SlickJam\dev\Farkle\FarklePractice\FarklePracticeUnitTests\obj\Debug\FarklePracticeUnitTests.csprojResolveAssemblyReference.cache
-C:\Users\SlickJam\dev\Farkle\FarklePractice\FarklePracticeUnitTests\obj\Debug\FarklePracticeUnitTests.dll
-C:\Users\SlickJam\dev\Farkle\FarklePractice\FarklePracticeUnitTests\obj\Debug\FarklePracticeUnitTests.pdb

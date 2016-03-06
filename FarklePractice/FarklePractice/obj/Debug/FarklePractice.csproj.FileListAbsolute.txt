@@ -4,9 +4,3 @@ c:\users\slickjam\documents\visual studio 2015\Projects\FarklePractice\FarklePra
 c:\users\slickjam\documents\visual studio 2015\Projects\FarklePractice\FarklePractice\obj\Debug\FarklePractice.csprojResolveAssemblyReference.cache
 c:\users\slickjam\documents\visual studio 2015\Projects\FarklePractice\FarklePractice\obj\Debug\FarklePractice.exe
 c:\users\slickjam\documents\visual studio 2015\Projects\FarklePractice\FarklePractice\obj\Debug\FarklePractice.pdb
-C:\Users\SlickJam\dev\Farkle\FarklePractice\FarklePractice\bin\Debug\FarklePractice.exe.config
-C:\Users\SlickJam\dev\Farkle\FarklePractice\FarklePractice\obj\Debug\FarklePractice.exe
-C:\Users\SlickJam\dev\Farkle\FarklePractice\FarklePractice\obj\Debug\FarklePractice.pdb
-C:\Users\SlickJam\dev\Farkle\FarklePractice\FarklePractice\bin\Debug\FarklePractice.exe
-C:\Users\SlickJam\dev\Farkle\FarklePractice\FarklePractice\bin\Debug\FarklePractice.pdb
-C:\Users\SlickJam\dev\Farkle\FarklePractice\FarklePractice\obj\Debug\FarklePractice.csprojResolveAssemblyReference.cache
