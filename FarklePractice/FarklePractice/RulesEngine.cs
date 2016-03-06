@@ -16,6 +16,7 @@ namespace FarklePractice
         private const int MaximumDiceValue = 6;
         private const int MaxNumberOfDice = 6;
 
+        private const int Single = 1;
         private const int Pair = 2;
         private const int TwoSetsOfThreeOfAKind = 2;
         private const int ThreePairs = 3;
@@ -54,11 +55,6 @@ namespace FarklePractice
                 score = CalculateScore(dice);
             }
 
-            if (0 == score)
-            {
-                score = scoreIndividualDice(dice);
-            }
-
             return score;
         }
 
@@ -69,33 +65,44 @@ namespace FarklePractice
             int threeOfAKindCounter = 0;
             bool foundFourOfAKind = false;
 
-            for (int i = MinimumDiceValue; i <= MaximumDiceValue; i++)
+            for (int diceFaceValue = MinimumDiceValue; diceFaceValue <= MaximumDiceValue; diceFaceValue++)
             {
-                diceValueCount = delegate (IDice diceVal) { return diceVal.Value == i; };
+                diceValueCount = delegate (IDice diceVal) { return diceVal.Value == diceFaceValue; };
                 int count = dice.Count(diceValueCount);
                 if (FiveOfAKind == count || SixOfAKind == count)
                 {
                     score = ScoreXofAKind(count);
                 }
-                else if(FourOfAKind == count)
+                else if (FourOfAKind == count)
                 {
                     foundFourOfAKind = true;
                     score = ScoreXofAKind(count);
-                    if(pairCounter > 0)
+                    if (pairCounter == Single)
                     {
-                        score = ScoreThreePairsOrFourOfAKindAndAPair(pairCounter, foundFourOfAKind); 
+                        score = ScoreThreePairsOrFourOfAKindAndAPair(foundFourOfAKind);
                     }
                 }
-                else if(ThreeOfAKind == count)
+                else if (ThreeOfAKind == count)
                 {
                     threeOfAKindCounter++;
-                    score = ScoreThreeOfAKindOrTwoSetsOfThree(i, threeOfAKindCounter);
+                    score = ScoreThreeOfAKindOrTwoSetsOfThree(diceFaceValue, threeOfAKindCounter);
 
                 }
-                else if(Pair == count)
+                else if (Pair == count)
                 {
                     pairCounter++;
-                    score = ScoreThreePairsOrFourOfAKindAndAPair(pairCounter, foundFourOfAKind);
+                    if (pairCounter == ThreePairs  || foundFourOfAKind)
+                    {
+                        score = ScoreThreePairsOrFourOfAKindAndAPair(foundFourOfAKind);
+                    }
+                    else if (diceFaceValue == 1 || diceFaceValue == 5)
+                    {
+                        score += ScoreOnesAndFives(diceFaceValue) * Pair;
+                    }
+                }
+                else if(Single == count)
+                {
+                    score += ScoreOnesAndFives(diceFaceValue);
                 }
 
             }
@@ -140,7 +147,7 @@ namespace FarklePractice
             return score;
         }
 
-        private int ScoreThreePairsOrFourOfAKindAndAPair(int pairCount, bool foundFourOfAKind)
+        private int ScoreThreePairsOrFourOfAKindAndAPair(bool foundFourOfAKind)
         {
             int score = 0;
 
@@ -148,7 +155,7 @@ namespace FarklePractice
             {
                 score = ScoreForFourOfAKindAndAPair;
             }
-            else if(ThreePairs == pairCount)
+            else
             {
                 score = ScoreForThreePairs;
             }
@@ -202,23 +209,22 @@ namespace FarklePractice
             return result;
         }
 
-        private int scoreIndividualDice(IDice[] dice)
+        private int ScoreOnesAndFives(int diceFaceValue)
         {
             int score = 0;
-            foreach (IDice d in dice)
-            {
-                switch (d.Value)
-                {
-                    case 1:
-                        score += 100;
-                        break;
-                    case 2:
 
-                    case 5:
-                        score += 50;
-                        break;
-                }
+            switch (diceFaceValue)
+            {
+                case 1:
+                    score = 100;
+                    break;
+                case 2:
+
+                case 5:
+                    score = 50;
+                    break;
             }
+
 
             return score;
         }
