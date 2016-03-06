@@ -17,6 +17,7 @@ namespace FarklePractice
         private const int MaxNumberOfDice = 6;
 
         private const int Pair = 2;
+        private const int TwoSetsOfThreeOfAKind = 2;
         private const int ThreePairs = 3;
         private const int SixOfAKind = 6;
         private const int FiveOfAKind = 5;
@@ -48,14 +49,6 @@ namespace FarklePractice
                 score = ScoreForAStraight;
             }
 
-            if(0 == score)
-            {
-                if(IsThreePairs(dice))
-                {
-                    score = ScoreForThreePairs;
-                }
-            }
-
             if (0 == score)
             {
                 score = CalculateScore(dice);
@@ -72,36 +65,37 @@ namespace FarklePractice
         private int CalculateScore(IDice[] dice)
         {
             int score = 0;
-            bool foundThreeOfAKind = false;
+            int pairCounter = 0;
+            int threeOfAKindCounter = 0;
             bool foundFourOfAKind = false;
 
             for (int i = MinimumDiceValue; i <= MaximumDiceValue; i++)
             {
                 diceValueCount = delegate (IDice diceVal) { return diceVal.Value == i; };
                 int count = dice.Count(diceValueCount);
-                if (count >= FourOfAKind && count <= SixOfAKind)
+                if (FiveOfAKind == count || SixOfAKind == count)
+                {
+                    score = ScoreXofAKind(count);
+                }
+                else if(FourOfAKind == count)
                 {
                     foundFourOfAKind = true;
-                    score += ScoreXofAKind(count);
+                    score = ScoreXofAKind(count);
+                    if(pairCounter > 0)
+                    {
+                        score = ScoreThreePairsOrFourOfAKindAndAPair(pairCounter, foundFourOfAKind); 
+                    }
                 }
                 else if(ThreeOfAKind == count)
                 {
-                    if (foundThreeOfAKind)
-                    {
-                        score = ScoreForTwoSetsOfThree;
-                    }
-                    else
-                    {
-                        foundThreeOfAKind = true;
-                        score = ScoreThreeOfAKind(i);
-                    }
+                    threeOfAKindCounter++;
+                    score = ScoreThreeOfAKindOrTwoSetsOfThree(i, threeOfAKindCounter);
+
                 }
                 else if(Pair == count)
                 {
-                    if(foundFourOfAKind)
-                    {
-                        score = ScoreForFourOfAKindAndAPair;
-                    }
+                    pairCounter++;
+                    score = ScoreThreePairsOrFourOfAKindAndAPair(pairCounter, foundFourOfAKind);
                 }
 
             }
@@ -146,6 +140,38 @@ namespace FarklePractice
             return score;
         }
 
+        private int ScoreThreePairsOrFourOfAKindAndAPair(int pairCount, bool foundFourOfAKind)
+        {
+            int score = 0;
+
+            if (foundFourOfAKind)
+            {
+                score = ScoreForFourOfAKindAndAPair;
+            }
+            else if(ThreePairs == pairCount)
+            {
+                score = ScoreForThreePairs;
+            }
+
+            return score;
+        }
+
+        private int ScoreThreeOfAKindOrTwoSetsOfThree(int diceFaceValue, int threeOfAKindCounter)
+        {
+            int score = 0;
+
+            if (threeOfAKindCounter == TwoSetsOfThreeOfAKind)
+            {
+                score = ScoreForTwoSetsOfThree;
+            }
+            else
+            {
+                score = ScoreThreeOfAKind(diceFaceValue);
+            }
+
+            return score;
+        }
+
         private bool IsRollAOneThroughSixStraight(IDice[] dice)
         {
             bool result = true;
@@ -172,30 +198,6 @@ namespace FarklePractice
             {
                 result = false;
             }
-
-            return result;
-        }
-
-        private bool IsThreePairs(IDice[] dice)
-        {
-            bool result = false;
-            int count = 0;
-            
-
-            for (int i = MinimumDiceValue; i <= MaximumDiceValue; i++)
-            {
-                diceValueCount = delegate (IDice diceVal) { return diceVal.Value == i; };
-                if (dice.Count(diceValueCount) == 2)
-                {
-                    count++;
-                }
-            }
-
-            if(ThreePairs == count)
-            {
-                result = true;
-            }
-
 
             return result;
         }

@@ -413,6 +413,21 @@ namespace FarklePracticeUnitTests
         }
 
         [TestMethod]
+        public void RoleIsPairPlusFourOfAKind()
+        {
+            RulesEngine rules = new RulesEngine();
+            dice1.Setup(mock => mock.Value).Returns(2);
+            dice2.Setup(mock => mock.Value).Returns(2);
+            dice3.Setup(mock => mock.Value).Returns(6);
+            dice4.Setup(mock => mock.Value).Returns(6);
+            dice5.Setup(mock => mock.Value).Returns(6);
+            dice6.Setup(mock => mock.Value).Returns(6);
+
+            IDice[] diceArray = new IDice[] { dice1.Object, dice2.Object, dice3.Object, dice4.Object, dice5.Object, dice6.Object };
+            Assert.AreEqual((int)PointValues.OneThousandFiveHundred, rules.ScoreRoll(diceArray));
+        }
+
+        [TestMethod]
         public void RoleIsFourOfAKindPlusAPairAndNotFourOnesAndTwoFives()
         {
             RulesEngine rules = new RulesEngine();
