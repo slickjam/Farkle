@@ -1,9 +1,0 @@
-c:\users\slickjam\documents\visual studio 2015\Projects\FarklePractice\FarklePracticeUnitTests\bin\Debug\FarklePracticeUnitTests.dll
-c:\users\slickjam\documents\visual studio 2015\Projects\FarklePractice\FarklePracticeUnitTests\bin\Debug\FarklePracticeUnitTests.pdb
-c:\users\slickjam\documents\visual studio 2015\Projects\FarklePractice\FarklePracticeUnitTests\bin\Debug\FarklePractice.exe
-c:\users\slickjam\documents\visual studio 2015\Projects\FarklePractice\FarklePracticeUnitTests\bin\Debug\FarklePractice.pdb
-c:\users\slickjam\documents\visual studio 2015\Projects\FarklePractice\FarklePracticeUnitTests\obj\Debug\FarklePracticeUnitTests.csprojResolveAssemblyReference.cache
-c:\users\slickjam\documents\visual studio 2015\Projects\FarklePractice\FarklePracticeUnitTests\obj\Debug\FarklePracticeUnitTests.dll
-c:\users\slickjam\documents\visual studio 2015\Projects\FarklePractice\FarklePracticeUnitTests\obj\Debug\FarklePracticeUnitTests.pdb
-C:\Users\SlickJam\documents\visual studio 2015\Projects\FarklePractice\FarklePracticeUnitTests\bin\Debug\Moq.dll
-C:\Users\SlickJam\documents\visual studio 2015\Projects\FarklePractice\FarklePracticeUnitTests\bin\Debug\Moq.xml
