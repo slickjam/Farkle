@@ -15,8 +15,8 @@ namespace FarklePractice
         private const int MinimumDiceValue = 1;
         private const int MaximumDiceValue = 6;
         private const int MaxNumberOfDice = 6;
-        
 
+        private const int Pair = 2;
         private const int ThreePairs = 3;
         private const int SixOfAKind = 6;
         private const int FiveOfAKind = 5;
@@ -50,14 +50,6 @@ namespace FarklePractice
 
             if(0 == score)
             {
-                if(IsFourOfAKindAndAPair(dice))
-                {
-                    score = ScoreForFourOfAKindAndAPair;
-                }
-            }
-
-            if(0 == score)
-            {
                 if(IsThreePairs(dice))
                 {
                     score = ScoreForThreePairs;
@@ -66,7 +58,7 @@ namespace FarklePractice
 
             if (0 == score)
             {
-                score = CalculateXofAKindScore(dice);
+                score = CalculateScore(dice);
             }
 
             if (0 == score)
@@ -77,10 +69,11 @@ namespace FarklePractice
             return score;
         }
 
-        private int CalculateXofAKindScore(IDice[] dice)
+        private int CalculateScore(IDice[] dice)
         {
             int score = 0;
             bool foundThreeOfAKind = false;
+            bool foundFourOfAKind = false;
 
             for (int i = MinimumDiceValue; i <= MaximumDiceValue; i++)
             {
@@ -88,7 +81,8 @@ namespace FarklePractice
                 int count = dice.Count(diceValueCount);
                 if (count >= FourOfAKind && count <= SixOfAKind)
                 {
-                    score = ScoreXofAKind(count);
+                    foundFourOfAKind = true;
+                    score += ScoreXofAKind(count);
                 }
                 else if(ThreeOfAKind == count)
                 {
@@ -100,6 +94,13 @@ namespace FarklePractice
                     {
                         foundThreeOfAKind = true;
                         score = ScoreThreeOfAKind(i);
+                    }
+                }
+                else if(Pair == count)
+                {
+                    if(foundFourOfAKind)
+                    {
+                        score = ScoreForFourOfAKindAndAPair;
                     }
                 }
 
