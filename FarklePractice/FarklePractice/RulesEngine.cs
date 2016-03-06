@@ -15,12 +15,17 @@ namespace FarklePractice
         private const int MinimumDiceValue = 1;
         private const int MaximumDiceValue = 6;
         private const int MaxNumberOfDice = 6;
+        
 
         private const int ThreePairs = 3;
         private const int SixOfAKind = 6;
         private const int FiveOfAKind = 5;
         private const int FourOfAKind = 4;
+        private const int ThreeOfAKind = 3;
 
+
+        private const int ThreeOfAKindMultiplier = 100;
+        private const int ScoreForThreeOnes = 300;
         private const int ScoreForSixOfAKind = 3000;
         private const int ScoreForFiveOfAKind = 2000;
         private const int ScoreForFourOfAKind = 1000;
@@ -74,11 +79,6 @@ namespace FarklePractice
 
             if (0 == score)
             {
-                score = ScoreIfThreeOfAKind(dice);
-            }
-
-            if (0 == score)
-            {
                 score = scoreIndividualDice(dice);
             }
 
@@ -92,7 +92,16 @@ namespace FarklePractice
             {
                 diceValueCount = delegate (IDice diceVal) { return diceVal.Value == i; };
                 int count = dice.Count(diceValueCount);
-                score += ScoreXofAKind(count);
+                if (count >= FourOfAKind && count <= SixOfAKind)
+                {
+                    score += ScoreXofAKind(count);
+                }
+                else if(ThreeOfAKind == count)
+                {
+                    score += ScoreThreeOfAKind(i);
+                }
+
+
             }
 
             return score;
@@ -118,6 +127,23 @@ namespace FarklePractice
 
             return score;
         }
+
+        private int ScoreThreeOfAKind(int diceFaceValue)
+        {
+            int score = 0;
+
+            if(diceFaceValue != 1)
+            {
+                score = diceFaceValue * ThreeOfAKindMultiplier;
+            }
+            else
+            {
+                score = ScoreForThreeOnes;
+            }
+            
+            return score;
+        }
+
 
         private bool IsTwoSetsOfThreeOfAKind(IDice[] dice)
         {
@@ -221,21 +247,6 @@ namespace FarklePractice
 
 
             return result;
-        }
-
-        private int ScoreIfThreeOfAKind(IDice[] dice)
-        {
-            int score = 0;
-            // Start at 2 because 1 is a special case and shouldn't be handled in this function
-            for (int i = MinimumDiceValue + 1; i <= MaximumDiceValue; i++)
-            {
-                diceValueCount = delegate (IDice diceVal) { return diceVal.Value == i; };
-                if (dice.Count(diceValueCount) == 3)
-                {
-                    score = i * 100;
-                }
-            }
-            return score;
         }
 
         private int scoreIndividualDice(IDice[] dice)
