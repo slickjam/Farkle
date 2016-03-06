@@ -15,7 +15,12 @@ namespace FarklePractice
         private const int MinimumDiceValue = 1;
         private const int MaximumDiceValue = 6;
         private const int MaxNumberOfDice = 6;
+
         private const int ThreePairs = 3;
+        private const int SixOfAKind = 6;
+        private const int FiveOfAKind = 5;
+        private const int FourOfAKind = 4;
+
         private const int ScoreForSixOfAKind = 3000;
         private const int ScoreForFiveOfAKind = 2000;
         private const int ScoreForFourOfAKind = 1000;
@@ -25,6 +30,7 @@ namespace FarklePractice
         private const int ScoreForTwoSetsOfThree = 2500;
 
         private Func<IDice, bool> diceValueCount;
+        private List<int> diceCountByValue = new List<int>();
 
 
         public int ScoreRoll(IDice[] dice)
@@ -63,26 +69,7 @@ namespace FarklePractice
 
             if (0 == score)
             {
-                if (IsXNumberOfAKind(dice, 6))
-                {
-                    score = ScoreForSixOfAKind;
-                }
-            }
-
-            if(0 == score)
-            {
-                if (IsXNumberOfAKind(dice, 5))
-                {
-                    score = ScoreForFiveOfAKind;
-                }
-            }
-
-            if(0 == score)
-            {
-                if (IsXNumberOfAKind(dice, 4))
-                {
-                    score = ScoreForFourOfAKind;
-                }
+                score = CalculateXofAKindScore(dice);
             }
 
             if (0 == score)
@@ -93,6 +80,40 @@ namespace FarklePractice
             if (0 == score)
             {
                 score = scoreIndividualDice(dice);
+            }
+
+            return score;
+        }
+
+        private int CalculateXofAKindScore(IDice[] dice)
+        {
+            int score = 0;
+            for (int i = MinimumDiceValue; i <= MaximumDiceValue; i++)
+            {
+                diceValueCount = delegate (IDice diceVal) { return diceVal.Value == i; };
+                int count = dice.Count(diceValueCount);
+                score += ScoreXofAKind(count);
+            }
+
+            return score;
+        }
+
+        private int ScoreXofAKind(int count)
+        {
+            int score = 0;
+            switch (count)
+            {
+                case SixOfAKind:
+                    score = ScoreForSixOfAKind;
+                    break;
+
+                case FiveOfAKind:
+                    score = ScoreForFiveOfAKind;
+                    break;
+
+                case FourOfAKind:
+                    score = ScoreForFourOfAKind;
+                    break;
             }
 
             return score;
@@ -202,21 +223,6 @@ namespace FarklePractice
             return result;
         }
 
-
-        private bool IsXNumberOfAKind(IDice[] dice, int countOfAKind)
-        {
-            bool result = false;
-            for (int i = MinimumDiceValue; i <= MaximumDiceValue; i++)
-            {
-                diceValueCount = delegate (IDice diceVal) { return diceVal.Value == i; };
-                if (dice.Count(diceValueCount) == countOfAKind)
-                {
-                    result = true;
-                }
-            }
-            return result;
-        }
-
         private int ScoreIfThreeOfAKind(IDice[] dice)
         {
             int score = 0;
@@ -245,7 +251,7 @@ namespace FarklePractice
                     case 2:
 
                     case 5:
-                        score = 50;
+                        score += 50;
                         break;
                 }
             }

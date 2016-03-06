@@ -441,5 +441,37 @@ namespace FarklePracticeUnitTests
             IDice[] diceArray = new IDice[] { dice1.Object, dice2.Object, dice3.Object, dice4.Object, dice5.Object, dice6.Object };
             Assert.AreEqual((int)PointValues.TwoThousandFiveHundred, rules.ScoreRoll(diceArray));
         }
+
+        [TestMethod]
+        public void RoleTwoOnesAndAFiveWithNoOtherWinningCombos()
+        {
+            RulesEngine rules = new RulesEngine();
+            dice1.Setup(mock => mock.Value).Returns(1);
+            dice2.Setup(mock => mock.Value).Returns(1);
+            dice3.Setup(mock => mock.Value).Returns(5);
+            dice4.Setup(mock => mock.Value).Returns(3);
+            dice5.Setup(mock => mock.Value).Returns(4);
+            dice6.Setup(mock => mock.Value).Returns(6);
+
+            IDice[] diceArray = new IDice[] { dice1.Object, dice2.Object, dice3.Object, dice4.Object, dice5.Object, dice6.Object };
+            int expectedScore = 100 + 100 + 50;
+            Assert.AreEqual(expectedScore, rules.ScoreRoll(diceArray));
+        }
+
+       /* [TestMethod]
+        public void RoleThreeOfAKindAOneAndAFive()
+        {
+            RulesEngine rules = new RulesEngine();
+            dice1.Setup(mock => mock.Value).Returns(3);
+            dice2.Setup(mock => mock.Value).Returns(3);
+            dice3.Setup(mock => mock.Value).Returns(3);
+            dice4.Setup(mock => mock.Value).Returns(1);
+            dice5.Setup(mock => mock.Value).Returns(5);
+            dice6.Setup(mock => mock.Value).Returns(6);
+
+            IDice[] diceArray = new IDice[] { dice1.Object, dice2.Object, dice3.Object, dice4.Object, dice5.Object, dice6.Object };
+            int expectedScore = 300 + 100 + 50;
+            Assert.AreEqual(expectedScore, rules.ScoreRoll(diceArray));
+        }*/
     }
 }
