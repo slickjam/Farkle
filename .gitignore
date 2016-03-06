@@ -1,6 +1,3 @@
-*.exe
-*.cache
 packages/
 .vs/
-*.pdb
-bin/
+
