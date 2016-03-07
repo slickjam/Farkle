@@ -111,7 +111,6 @@ namespace FarklePractice
                 {
                     score += ScoreOnesAndFives(diceFaceValue);
                 }
-
             }
 
             return score;

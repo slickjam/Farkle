@@ -45,12 +45,8 @@ namespace FarklePractice
                 CurrentPlayer.Score = score;
             }
 
-            
-
             // Move to the next player
-            MoveToTheNextPlayer();
-            
-
+            MoveToTheNextPlayer();        
         }
 
         private void RollTheDice()
@@ -63,7 +59,12 @@ namespace FarklePractice
 
         private void MoveToTheNextPlayer()
         {
-            CurrentPlayer = players[++currentPlayerIndex];
+            currentPlayerIndex++;
+            if (players.Length == currentPlayerIndex)
+            {
+                currentPlayerIndex = 0;
+            }
+            CurrentPlayer = players[currentPlayerIndex];
         }
     }
 }
