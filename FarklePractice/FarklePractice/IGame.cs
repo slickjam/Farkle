@@ -10,6 +10,7 @@ namespace FarklePractice
     {
         Player CurrentPlayer { get; set; }
         IDice[] GameDice { get; set; }
+        bool IsFinalRound { get; }
 
         void TakeTurn();
         

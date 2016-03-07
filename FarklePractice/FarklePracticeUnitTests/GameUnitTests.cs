@@ -73,7 +73,7 @@ namespace FarklePracticeUnitTests
             int expectedScoreInActive = 0;
 
             mockEngine.Setup(mock => mock.ScoreRoll(new Dice[] { })).Returns(expectedScoreActive);
-            
+
 
             farkle.TakeTurn();
 
@@ -123,6 +123,18 @@ namespace FarklePracticeUnitTests
             Assert.AreEqual(expectedScoreActive, playerFour.Score);
             Assert.AreEqual(playerOne.Nickname, farkle.CurrentPlayer.Nickname);
 
+        }
+
+        [TestMethod]
+        public void IsFinalRoundIsFalse()
+        {
+            Assert.IsFalse(farkle.IsFinalRound);
+        }
+
+        [TestMethod]
+        public void IsFinalRoundIsTrue()
+        {
+            Assert.IsTrue(farkle.IsFinalRound);
         }
     }
 }

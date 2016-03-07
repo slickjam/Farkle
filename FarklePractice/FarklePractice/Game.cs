@@ -27,6 +27,7 @@ namespace FarklePractice
 
         public Player CurrentPlayer { get; set; }
         public IDice[] GameDice { get; set; }
+        public bool IsFinalRound { get; private set; }
 
         public void TakeTurn()
         {
