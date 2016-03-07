@@ -28,5 +28,6 @@ namespace FarklePractice
         public string LastName { get; private set; }
         public string Nickname { get; private set; }
         public int Score { get; set; }
+        public bool IsActive { get; set; }
     }
 }

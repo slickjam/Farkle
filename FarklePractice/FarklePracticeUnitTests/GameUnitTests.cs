@@ -1,6 +1,7 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using FarklePractice;
+using Moq;
 
 namespace FarklePracticeUnitTests
 {
@@ -9,28 +10,12 @@ namespace FarklePracticeUnitTests
     {
         Player playerOne = new Player("jim");
         Player playerTwo = new Player("bob");
-
-        [TestMethod]
-        public void GameObjectsAreCreatedAndValid()
-        {
-            // Dice
-            Dice[] farkleDice = new Dice[] { new Dice(1,6), new Dice(1, 6), new Dice(1, 6),
-                                             new Dice(1, 6), new Dice(1, 6), new Dice(1, 6) };
-
-            //Players
-            Game farkle = new Game(new Player[] { playerOne, playerTwo }, farkleDice);
-
-            //Rules
-
-
-            Assert.AreEqual(farkle.CurrentPlayer, playerOne);
-            Assert.AreEqual(farkle.GameDice.Length, 6);
-        }
+        Mock<IRulesEngine> mockEngine = new Mock<IRulesEngine>();
 
         [TestMethod]
         public void GameStart()
         {
-            Game farkle = new Game(new Player[] { playerOne, playerTwo }, new Dice[] { });
+            IGame farkle = new Game(new Player[] { playerOne, playerTwo }, new Dice[] { }, new RulesEngine());
 
             Assert.AreEqual(farkle.CurrentPlayer, playerOne);
         }
@@ -38,18 +23,48 @@ namespace FarklePracticeUnitTests
         [TestMethod]
         public void GameStartWithNoPlayers()
         {
-            Game farkle = new Game(new Player[] { },new Dice[] { });
+            Game farkle = new Game(new Player[] { },new Dice[] { }, new RulesEngine());
 
             Assert.IsNull(farkle.CurrentPlayer);
         }
 
-       /* [TestMethod]
-        public void PlayerOneBeginTurnAndDoesNotScore()
+        [TestMethod]
+        public void PlayerOneBeginsTurnAndDoesNotScore()
         {
-            Game farkle = new Game(new Player[] { playerOne, playerTwo }, new Dice[] { });
+            mockEngine.Setup(mock => mock.ScoreRoll(new Dice[] { })).Returns(0);
+            Game farkle = new Game(new Player[] { playerOne, playerTwo }, new Dice[] { }, mockEngine.Object);
             farkle.TakeTurn();
 
-            Assert.AreEqual(farkle.CurrentPlayer, playerTwo);
-        }*/
+            Assert.AreEqual(playerTwo.Nickname, farkle.CurrentPlayer.Nickname);
+        }
+
+        [TestMethod]
+        public void PlayerOneBeginsTurnAndScoresOneHundred()
+        {
+            int returnedScore = 100;
+            int expectedScore = 0;
+            mockEngine.Setup(mock => mock.ScoreRoll(new Dice[] { })).Returns(returnedScore);
+            Game farkle = new Game(new Player[] { playerOne, playerTwo }, new Dice[] { }, mockEngine.Object);
+            farkle.TakeTurn();
+
+            Assert.AreEqual(expectedScore, playerOne.Score);
+            Assert.IsFalse(playerOne.IsActive);
+            Assert.AreEqual(playerTwo.Nickname, farkle.CurrentPlayer.Nickname);
+        }
+
+        [TestMethod]
+        public void CurrentPlayerHasReachFiveHundredPointsAndIsNowActive()
+        {
+            int expectedScore = 500;
+            bool isActive = true;
+
+            mockEngine.Setup(mock => mock.ScoreRoll(new Dice[] { })).Returns(expectedScore);
+            Game farkle = new Game(new Player[] { playerOne, playerTwo }, new Dice[] { }, mockEngine.Object);
+            farkle.TakeTurn();
+
+            Assert.AreEqual(isActive, playerOne.IsActive);
+            Assert.AreEqual(expectedScore, playerOne.Score);
+            Assert.AreEqual(playerTwo.Nickname, farkle.CurrentPlayer.Nickname);
+        }
     }
 }

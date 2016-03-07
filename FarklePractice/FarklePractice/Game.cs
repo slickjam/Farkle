@@ -9,23 +9,47 @@ namespace FarklePractice
     public class Game :IGame
     {
         private Player[] players;
-        public Game(Player[] players, Dice[] dice)
+        private int currentPlayerIndex;
+        private IRulesEngine rulesEngine;
+        private const int MinimumActiveScore = 500;
+
+        public Game(Player[] players, IDice[] dice, IRulesEngine engine)
         {
             this.players = players;
             this.GameDice = dice;
+            this.rulesEngine = engine;
+
             if (players.Length > 0)
             {
-                CurrentPlayer = players[0];
+                CurrentPlayer = players[currentPlayerIndex];
             }
         }
 
         public Player CurrentPlayer { get; set; }
-        public Dice[] GameDice { get; set; }
+        public IDice[] GameDice { get; set; }
 
         public void TakeTurn()
         {
             //Current player "rolls" the dice
             RollTheDice();
+
+            // Score the roll
+            int score = rulesEngine.ScoreRoll(GameDice);
+            if (CurrentPlayer.IsActive)
+            {
+                CurrentPlayer.Score += score;
+            }
+            else if (score >= MinimumActiveScore && !CurrentPlayer.IsActive)
+            {
+                CurrentPlayer.IsActive = true;
+                CurrentPlayer.Score = score;
+            }
+
+            
+
+            // Move to the next player
+            MoveToTheNextPlayer();
+            
 
         }
 
@@ -35,6 +59,11 @@ namespace FarklePractice
             {
                 d.Roll();
             }
+        }
+
+        private void MoveToTheNextPlayer()
+        {
+            CurrentPlayer = players[++currentPlayerIndex];
         }
     }
 }

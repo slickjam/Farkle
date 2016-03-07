@@ -9,7 +9,7 @@ namespace FarklePractice
     public interface IGame
     {
         Player CurrentPlayer { get; set; }
-        Dice[] GameDice { get; set; }
+        IDice[] GameDice { get; set; }
 
         void TakeTurn();
         

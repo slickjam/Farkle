@@ -43,5 +43,15 @@ namespace FarklePracticeUnitTests
             Assert.AreEqual(playerOne.Score, 3);
         }
 
+        [TestMethod]
+        public void PlayerIsActive()
+        {
+            bool isActive = true;
+            Player playerOne = new Player("SlickJam");
+            playerOne.IsActive = true;
+
+            Assert.AreEqual(isActive, playerOne.IsActive);
+        }
+
     }
 }
