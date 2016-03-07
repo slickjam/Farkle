@@ -85,7 +85,14 @@ namespace FarklePractice
                 else if (ThreeOfAKind == count)
                 {
                     threeOfAKindCounter++;
-                    score = ScoreThreeOfAKindOrTwoSetsOfThree(diceFaceValue, threeOfAKindCounter);
+                    if (threeOfAKindCounter == TwoSetsOfThreeOfAKind)
+                    {
+                        score = ScoreThreeOfAKindOrTwoSetsOfThree(diceFaceValue, threeOfAKindCounter);
+                    }
+                    else
+                    {
+                        score += ScoreThreeOfAKindOrTwoSetsOfThree(diceFaceValue, threeOfAKindCounter);
+                    }
 
                 }
                 else if (Pair == count)

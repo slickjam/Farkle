@@ -489,7 +489,39 @@ namespace FarklePracticeUnitTests
             Assert.AreEqual(expectedScore, rules.ScoreRoll(diceArray));
         }
 
-        /* [TestMethod]
+        [TestMethod]
+        public void RoleTwoOnesAndTwoFiveAndTwoFours()
+        {
+            RulesEngine rules = new RulesEngine();
+            dice1.Setup(mock => mock.Value).Returns(5);
+            dice2.Setup(mock => mock.Value).Returns(1);
+            dice3.Setup(mock => mock.Value).Returns(5);
+            dice4.Setup(mock => mock.Value).Returns(4);
+            dice5.Setup(mock => mock.Value).Returns(1);
+            dice6.Setup(mock => mock.Value).Returns(4);
+
+            IDice[] diceArray = new IDice[] { dice1.Object, dice2.Object, dice3.Object, dice4.Object, dice5.Object, dice6.Object };
+            int expectedScore = 1500;
+            Assert.AreEqual(expectedScore, rules.ScoreRoll(diceArray));
+        }
+
+        [TestMethod]
+        public void RoleThreeSixesTwoFivesAndAOne()
+        {
+            RulesEngine rules = new RulesEngine();
+            dice1.Setup(mock => mock.Value).Returns(6);
+            dice2.Setup(mock => mock.Value).Returns(6);
+            dice3.Setup(mock => mock.Value).Returns(6);
+            dice4.Setup(mock => mock.Value).Returns(5);
+            dice5.Setup(mock => mock.Value).Returns(5);
+            dice6.Setup(mock => mock.Value).Returns(1);
+
+            IDice[] diceArray = new IDice[] { dice1.Object, dice2.Object, dice3.Object, dice4.Object, dice5.Object, dice6.Object };
+            int expectedScore = 600 + 100 + 50 + 50;
+            Assert.AreEqual(expectedScore, rules.ScoreRoll(diceArray));
+        }
+
+         [TestMethod]
          public void RoleThreeOfAKindAOneAndAFive()
          {
              RulesEngine rules = new RulesEngine();
@@ -503,6 +535,6 @@ namespace FarklePracticeUnitTests
              IDice[] diceArray = new IDice[] { dice1.Object, dice2.Object, dice3.Object, dice4.Object, dice5.Object, dice6.Object };
              int expectedScore = 300 + 100 + 50;
              Assert.AreEqual(expectedScore, rules.ScoreRoll(diceArray));
-         }*/
+         }
     }
 }
