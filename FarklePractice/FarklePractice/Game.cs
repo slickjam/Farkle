@@ -11,6 +11,7 @@ namespace FarklePractice
         private Player[] players;
         private int currentPlayerIndex;
         private IRulesEngine rulesEngine;
+        private const int MinimumGameEndingScore = 10000;
         private const int MinimumActiveScore = 500;
 
         public Game(Player[] players, IDice[] dice, IRulesEngine engine)
@@ -44,6 +45,11 @@ namespace FarklePractice
             {
                 CurrentPlayer.IsActive = true;
                 CurrentPlayer.Score = score;
+            }
+
+            if(CurrentPlayer.Score >= MinimumGameEndingScore)
+            {
+                IsFinalRound = true;
             }
 
             // Move to the next player

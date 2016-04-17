@@ -128,12 +128,27 @@ namespace FarklePracticeUnitTests
         [TestMethod]
         public void IsFinalRoundIsFalse()
         {
+            playerOne.Score = 9999;
+            farkle.CurrentPlayer = playerOne;
+            farkle.TakeTurn();
             Assert.IsFalse(farkle.IsFinalRound);
         }
 
         [TestMethod]
         public void IsFinalRoundIsTrue()
         {
+            playerOne.Score = 10000;
+            farkle.CurrentPlayer = playerOne;
+            farkle.TakeTurn();
+            Assert.IsTrue(farkle.IsFinalRound);
+        }
+
+        [TestMethod]
+        public void IsFinalRoundIsTrueOverMinimumScore()
+        {
+            playerOne.Score = 10001;
+            farkle.CurrentPlayer = playerOne;
+            farkle.TakeTurn();
             Assert.IsTrue(farkle.IsFinalRound);
         }
     }
