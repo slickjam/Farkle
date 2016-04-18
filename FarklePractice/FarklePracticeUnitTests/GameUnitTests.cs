@@ -151,5 +151,14 @@ namespace FarklePracticeUnitTests
             farkle.TakeTurn();
             Assert.IsTrue(farkle.IsFinalRound);
         }
+
+        [TestMethod]
+        public void GameIsOver()
+        {
+            playerOne.Score = 10001;
+            farkle.CurrentPlayer = playerOne;
+            farkle.TakeTurn();
+            Assert.IsTrue(farkle.IsGameOver);
+        }
     }
 }
