@@ -48,10 +48,11 @@ namespace FarklePractice
                 CurrentPlayer.Score = score;
             }
 
-            if(CurrentPlayer.Score >= MinimumGameEndingScore)
-            {
-                IsFinalRound = true;
-            }
+            // Has a player reached a minimum ending score
+            CheckIfFinalRoundShouldStart();
+
+            // Check if the game should be marked as over
+            CheckIfGameIsOver();
 
             // Move to the next player
             MoveToTheNextPlayer();        
@@ -73,6 +74,35 @@ namespace FarklePractice
                 currentPlayerIndex = 0;
             }
             CurrentPlayer = players[currentPlayerIndex];
+        }
+
+        private void CheckIfFinalRoundShouldStart()
+        {
+            if (CurrentPlayer.Score >= MinimumGameEndingScore && !IsFinalRound)
+            {
+                IsFinalRound = true;
+            }
+        }
+
+        private void CheckIfGameIsOver()
+        {
+            if (IsFinalRound)
+            {
+                CurrentPlayer.IsActive = false;
+                AreAllPlayersInactive();
+            }
+        }
+
+        private void AreAllPlayersInactive()
+        {
+            var numberOfInActivePlayers = from Player p in players
+                        where p.IsActive == false
+                        select p;
+
+            if(numberOfInActivePlayers.Count() == players.Count())
+            {
+                IsGameOver = true;
+            }
         }
     }
 }

@@ -153,6 +153,44 @@ namespace FarklePracticeUnitTests
         }
 
         [TestMethod]
+        public void GameIsNotOver()
+        {
+            playerOne.Score = 9000;
+            farkle.CurrentPlayer = playerOne;
+            farkle.TakeTurn();
+            Assert.IsFalse(farkle.IsGameOver);
+        }
+
+        [TestMethod]
+        public void GameIsNotOverStillHaveActivePlayers()
+        {
+            playerOne.Score = 10000;
+            farkle.CurrentPlayer = playerOne;
+            playerTwo.IsActive = true;
+            playerThree.IsActive = true;
+            playerFour.IsActive = true;
+
+            // Player one takes a turn and sets the final round to true by getting 10,000 points
+            // Player one is marked as inactive after the turn is over
+            farkle.TakeTurn();
+            Assert.IsFalse(farkle.IsGameOver);
+
+            // Player two takes a turn and since the final round  has started is marked as inactive after the turn is over
+            farkle.TakeTurn();
+            Assert.IsFalse(farkle.IsGameOver);
+
+            // Player three takes a turn and since the final round has started is marged as inacive after the turn is over
+            farkle.TakeTurn();
+            Assert.IsFalse(farkle.IsGameOver);
+
+            // Player four takes a turn, since the final round has started and player four is the last player the game ends once
+            // Player for is done with the turn
+            farkle.TakeTurn();
+            Assert.IsTrue(farkle.IsGameOver);
+
+        }
+
+        [TestMethod]
         public void GameIsOver()
         {
             playerOne.Score = 10001;
