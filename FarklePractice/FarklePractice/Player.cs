@@ -29,5 +29,6 @@ namespace FarklePractice
         public string Nickname { get; private set; }
         public int Score { get; set; }
         public bool IsActive { get; set; }
+        public List<Dice> RolledDice { get; set; }
     }
 }

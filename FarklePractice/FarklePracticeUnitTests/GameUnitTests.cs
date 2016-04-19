@@ -2,6 +2,7 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using FarklePractice;
 using Moq;
+using System.Collections.Generic;
 
 namespace FarklePracticeUnitTests
 {
@@ -15,10 +16,14 @@ namespace FarklePracticeUnitTests
 
         Game farkle;
         Mock<IRulesEngine> mockEngine = new Mock<IRulesEngine>();
+        Mock<IUserInteraction> mockUserInteraction = new Mock<IUserInteraction>();
 
         public GameUnitTests()
         {
-            farkle = new Game(new Player[] { playerOne, playerTwo, playerThree, playerFour }, new Dice[] { }, mockEngine.Object);
+            farkle = new Game(new Player[] { playerOne, playerTwo, playerThree, playerFour },
+                              new IDice[] { new FakeDice(1), new FakeDice(2), new FakeDice(3),
+                                            new FakeDice(4), new FakeDice(5), new FakeDice(6) },
+                                            mockEngine.Object, mockUserInteraction.Object);
         }
 
         [TestMethod]
@@ -197,6 +202,30 @@ namespace FarklePracticeUnitTests
             farkle.CurrentPlayer = playerOne;
             farkle.TakeTurn();
             Assert.IsTrue(farkle.IsGameOver);
+        }
+
+        [TestMethod]
+        public void CurrentPlayerUsesAllDiceAndRollsAgain()
+        {
+            int expectedScore = 3000;
+            bool isActive = true;
+            FakeDice[] fakes = new FakeDice[] { new FakeDice(3), new FakeDice(3), new FakeDice(3) };
+            Queue<int> scores = new Queue<int>();
+            scores.Enqueue(expectedScore);
+            scores.Enqueue(0);
+
+            mockEngine.Setup(mock => mock.ScoreRoll(It.IsAny<IDice[]>())).Returns(scores.Dequeue);
+            mockUserInteraction.Setup(mock => mock.SelectDiceToKeep(It.IsAny<IDice[]>(),
+                                      It.IsAny<string>())).Returns(fakes);
+            mockUserInteraction.Setup(mock => mock.RollAgain(It.IsAny<string>())).Returns(true);
+
+            farkle.TakeTurn();
+
+            //what happens when we roll three times in a row??
+
+            Assert.AreEqual(isActive, playerOne.IsActive);
+            Assert.AreEqual(expectedScore, playerOne.Score);
+            Assert.AreEqual(playerOne.Nickname, farkle.CurrentPlayer.Nickname);
         }
     }
 }

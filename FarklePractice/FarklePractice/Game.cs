@@ -11,14 +11,18 @@ namespace FarklePractice
         private Player[] players;
         private int currentPlayerIndex;
         private IRulesEngine rulesEngine;
+        private IUserInteraction userInteraction;
+        private int numberOfDiceInPlay;
         private const int MinimumGameEndingScore = 10000;
         private const int MinimumActiveScore = 500;
 
-        public Game(Player[] players, IDice[] dice, IRulesEngine engine)
+        public Game(Player[] players, IDice[] dice, IRulesEngine engine, IUserInteraction uiObject)
         {
             this.players = players;
             this.GameDice = dice;
             this.rulesEngine = engine;
+            this.userInteraction = uiObject;
+            numberOfDiceInPlay = GameDice.Count();
 
             if (players.Length > 0)
             {
@@ -33,36 +37,46 @@ namespace FarklePractice
 
         public void TakeTurn()
         {
-            //Current player "rolls" the dice
+            bool playerRolledAgain = false;
+            // Current player "rolls" the dice
             RollTheDice();
 
+            // Prompt the player to select the dice to keep
+            IDice[] selectedDice = userInteraction.SelectDiceToKeep(GameDice, "Which dice would you like to keep?");
+
             // Score the roll
-            int score = rulesEngine.ScoreRoll(GameDice);
-            if (CurrentPlayer.IsActive)
+            int score = rulesEngine.ScoreRoll(selectedDice);
+            if (CurrentPlayer.IsActive && 0 != score)
             {
                 CurrentPlayer.Score += score;
+                playerRolledAgain = PromptPlayerToRollAgain(selectedDice);
+
             }
             else if (score >= MinimumActiveScore && !CurrentPlayer.IsActive)
             {
                 CurrentPlayer.IsActive = true;
                 CurrentPlayer.Score = score;
+                playerRolledAgain = PromptPlayerToRollAgain(selectedDice);
             }
 
-            // Has a player reached a minimum ending score
-            CheckIfFinalRoundShouldStart();
+            if (playerRolledAgain)
+            {
+                // Has a player reached a minimum ending score
+                CheckIfFinalRoundShouldStart();
 
-            // Check if the game should be marked as over
-            CheckIfGameIsOver();
+                // Check if the game should be marked as over
+                CheckIfGameIsOver();
 
-            // Move to the next player
-            MoveToTheNextPlayer();        
+                // Move to the next player
+                MoveToTheNextPlayer();
+            }    
         }
 
         private void RollTheDice()
         {
-            foreach(Dice d in GameDice)
+            for (int i = 0; i < numberOfDiceInPlay; i++)
             {
-                d.Roll();
+                GameDice[i].Roll();
             }
         }
 
@@ -74,6 +88,9 @@ namespace FarklePractice
                 currentPlayerIndex = 0;
             }
             CurrentPlayer = players[currentPlayerIndex];
+
+            // reset the number of dice in play
+            numberOfDiceInPlay = GameDice.Count();
         }
 
         private void CheckIfFinalRoundShouldStart()
@@ -103,6 +120,26 @@ namespace FarklePractice
             {
                 IsGameOver = true;
             }
+        }
+
+        private bool PromptPlayerToRollAgain(IDice[] selectedDice)
+        {
+            bool rollAgain = false;
+            // Prompt user to roll again, if they want
+            if (userInteraction.RollAgain("Do you want to roll again?"))
+            {
+                numberOfDiceInPlay = GameDice.Count() - selectedDice.Count();
+                if (0 == numberOfDiceInPlay)
+                {
+                    // We used all the dice the last turn and still scored so we now have them all to use again
+                    numberOfDiceInPlay = GameDice.Count();
+                }
+
+                TakeTurn();
+                rollAgain = true;
+            }
+
+            return rollAgain;
         }
     }
 }
