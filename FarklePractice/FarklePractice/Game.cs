@@ -37,7 +37,30 @@ namespace FarklePractice
 
         public void TakeTurn()
         {
-            bool playerRolledAgain = false;
+            // Roll the dice and score the dice the player chooses to keep
+            RollAndScoreSelectedDice();
+
+            // Has a player reached a minimum ending score
+            CheckIfFinalRoundShouldStart();
+
+            // Check if the game should be marked as over
+            CheckIfGameIsOver();
+
+            // Move to the next player
+            MoveToTheNextPlayer();
+   
+        }
+
+        private void RollTheDice()
+        {
+            for (int i = 0; i < numberOfDiceInPlay; i++)
+            {
+                GameDice[i].Roll();
+            }
+        }
+
+        private void RollAndScoreSelectedDice()
+        {
             // Current player "rolls" the dice
             RollTheDice();
 
@@ -49,35 +72,16 @@ namespace FarklePractice
             if (CurrentPlayer.IsActive && 0 != score)
             {
                 CurrentPlayer.Score += score;
-                playerRolledAgain = PromptPlayerToRollAgain(selectedDice);
+                PromptPlayerToRollAgain(selectedDice);
 
             }
             else if (score >= MinimumActiveScore && !CurrentPlayer.IsActive)
             {
                 CurrentPlayer.IsActive = true;
                 CurrentPlayer.Score = score;
-                playerRolledAgain = PromptPlayerToRollAgain(selectedDice);
+                PromptPlayerToRollAgain(selectedDice);
             }
 
-            if (playerRolledAgain)
-            {
-                // Has a player reached a minimum ending score
-                CheckIfFinalRoundShouldStart();
-
-                // Check if the game should be marked as over
-                CheckIfGameIsOver();
-
-                // Move to the next player
-                MoveToTheNextPlayer();
-            }    
-        }
-
-        private void RollTheDice()
-        {
-            for (int i = 0; i < numberOfDiceInPlay; i++)
-            {
-                GameDice[i].Roll();
-            }
         }
 
         private void MoveToTheNextPlayer()
@@ -122,9 +126,8 @@ namespace FarklePractice
             }
         }
 
-        private bool PromptPlayerToRollAgain(IDice[] selectedDice)
+        private void PromptPlayerToRollAgain(IDice[] selectedDice)
         {
-            bool rollAgain = false;
             // Prompt user to roll again, if they want
             if (userInteraction.RollAgain("Do you want to roll again?"))
             {
@@ -135,11 +138,8 @@ namespace FarklePractice
                     numberOfDiceInPlay = GameDice.Count();
                 }
 
-                TakeTurn();
-                rollAgain = true;
+                RollAndScoreSelectedDice();
             }
-
-            return rollAgain;
         }
     }
 }
