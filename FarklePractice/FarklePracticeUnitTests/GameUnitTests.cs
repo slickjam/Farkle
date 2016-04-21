@@ -213,11 +213,11 @@ namespace FarklePracticeUnitTests
         }
 
         [TestMethod]
-        public void CurrentPlayerUsesAllDiceAndRollsAgain()
+        public void CurrentPlayerRollsAgain()
         {
             int expectedScore = 1000;
             bool isActive = true;
-            FakeDice[] fakes = new FakeDice[] { new FakeDice(5), new FakeDice(5), new FakeDice(5) };
+            IDice[] fakes = new FakeDice[] { new FakeDice(5), new FakeDice(5), new FakeDice(5) };
             Queue<bool> rollAgain = new Queue<bool>();
             rollAgain.Enqueue(true);
             rollAgain.Enqueue(false);
@@ -228,7 +228,33 @@ namespace FarklePracticeUnitTests
 
             farkleWithRealRulesEngine.TakeTurn();
 
-            //what happens when we roll three times in a row??
+            Assert.AreEqual(isActive, playerOne.IsActive);
+            Assert.AreEqual(expectedScore, playerOne.Score);
+            Assert.AreEqual(playerTwo.Nickname, farkleWithRealRulesEngine.CurrentPlayer.Nickname);
+        }
+
+        [TestMethod]
+        public void CurrentPlayerRollsTwoOnesThenFarkles()
+        {
+            int expectedScore = 0;
+            bool isActive = true;
+            IDice[] diceRoll1 = new FakeDice[] { new FakeDice(5), new FakeDice(5), new FakeDice(5) };
+            IDice[] diceRoll2 = new FakeDice[] { new FakeDice(3), new FakeDice(3) };
+            Queue<IDice[]> diceRolls = new Queue<IDice[]>();
+            diceRolls.Enqueue(diceRoll1);
+            diceRolls.Enqueue(diceRoll2);
+
+            Queue<bool> rollAgain = new Queue<bool>();
+            rollAgain.Enqueue(true);
+            rollAgain.Enqueue(false);
+
+            mockUserInteraction.Setup(mock => mock.SelectDiceToKeep(It.IsAny<IDice[]>(),
+                                      It.IsAny<string>())).Returns(diceRolls.Dequeue);
+            mockUserInteraction.Setup(mock => mock.RollAgain(It.IsAny<string>())).Returns(rollAgain.Dequeue);
+
+            farkleWithRealRulesEngine.TakeTurn();
+
+            // How do I roll back score on fail??
 
             Assert.AreEqual(isActive, playerOne.IsActive);
             Assert.AreEqual(expectedScore, playerOne.Score);

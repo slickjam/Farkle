@@ -15,6 +15,7 @@ namespace FarklePractice
         private int numberOfDiceInPlay;
         private const int MinimumGameEndingScore = 10000;
         private const int MinimumActiveScore = 500;
+        private bool farkled = false;
 
         public Game(Player[] players, IDice[] dice, IRulesEngine engine, IUserInteraction uiObject)
         {
@@ -38,7 +39,7 @@ namespace FarklePractice
         public void TakeTurn()
         {
             // Roll the dice and score the dice the player chooses to keep
-            RollAndScoreSelectedDice();
+            RollAndScoreSelectedDice(false);
 
             // Has a player reached a minimum ending score
             CheckIfFinalRoundShouldStart();
@@ -59,7 +60,7 @@ namespace FarklePractice
             }
         }
 
-        private void RollAndScoreSelectedDice()
+        private void RollAndScoreSelectedDice(bool rolledAgain)
         {
             // Current player "rolls" the dice
             RollTheDice();
@@ -71,21 +72,31 @@ namespace FarklePractice
             int score = rulesEngine.ScoreRoll(selectedDice);
             if (CurrentPlayer.IsActive && 0 != score)
             {
-                CurrentPlayer.Score += score;
                 PromptPlayerToRollAgain(selectedDice);
-
+                if (!farkled)
+                {
+                    CurrentPlayer.Score += score;
+                }
             }
             else if (score >= MinimumActiveScore && !CurrentPlayer.IsActive)
             {
                 CurrentPlayer.IsActive = true;
-                CurrentPlayer.Score = score;
                 PromptPlayerToRollAgain(selectedDice);
+                if (!farkled)
+                {
+                    CurrentPlayer.Score += score;
+                }
+            }
+            else if(rolledAgain && 0 == score)
+            {
+                farkled = true;
             }
 
         }
 
         private void MoveToTheNextPlayer()
         {
+            farkled = false;
             currentPlayerIndex++;
             if (players.Length == currentPlayerIndex)
             {
@@ -138,7 +149,7 @@ namespace FarklePractice
                     numberOfDiceInPlay = GameDice.Count();
                 }
 
-                RollAndScoreSelectedDice();
+                RollAndScoreSelectedDice(true);
             }
         }
     }
